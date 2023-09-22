@@ -8,9 +8,6 @@ const ButtonA = () => {
 
   const [post, setPost]= useState([]);
   const [page, setPagination]= useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
   const token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjU2MCwiZXhwIjoxNzI2NTY3MTc5LCJ0eXBlIjoiYWNjZXNzIiwidGltZXN0YW1wIjoxNjk1MDMxMTc5fQ.0y7NtuVDCvcPvmWbliMs1q02sov2oFC6u2Hi6H4A2W4';
   const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -20,13 +17,14 @@ const ButtonA = () => {
 
 
 useEffect(()=>{
-  loadContent(page)  
+
+  loadContent(page)
+
+  
   },[])
 
 
   const loadContent = (page) => {
-    if (isLoading) return; // Prevent loading if another request is in progress
-    setIsLoading(true);
     // Replace this with your API call to fetch more content based on the page number
     // For example, you can use Axios or the fetch API to make the request.
     // Append the new content to the existing content state.
@@ -35,10 +33,8 @@ useEffect(()=>{
 
     // Mock API call
       axios.get(baseURL,config).then(res=>{
-        setPost(res.data.contacts)      
-        setIsLoading(false);
- 
-        
+        setPost(res.data.contacts)
+        setPagination(page+1);
             
             
         }).catch((error)=> {
@@ -49,22 +45,10 @@ useEffect(()=>{
 
   const handleScroll = (e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
-    setIsScrolled(true); // Se
-
     // Check if the user has scrolled to the bottom of the modal
-    if (scrollTop + clientHeight >= scrollHeight - 300) {
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
       console.log(e.target);
-      setIsScrolled(true); // Set the flag to prevent additional scrolls
-      alert(scrollTop);
-      if (scrollTop === 0 && page > 1) {
-        setPagination(page-1);
-      }else{        
-        setPagination(page+1);
-      }
-
-      alert(page);
       loadContent(page);
-
     }
   };
 
