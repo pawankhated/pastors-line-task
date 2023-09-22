@@ -51,7 +51,7 @@ useEffect(()=>{
     loader={<h4 className='loader_text'>Loading...</h4>}
     endMessage={<p>No more items to load</p>}
   >
-   <section className='buttonA_section'>
+   <section className='modal-content buttonA_section'>
     <Container>
     <div className='text-center'><h1>All Contacts</h1>
        <Link to="/buttonA" className='buttonA button my-4 d-inline-block mr-2'>switching to Modal A </Link>
