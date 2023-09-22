@@ -10,6 +10,7 @@
   }
   .table_div {
     overflow-y: scroll;
+    min-height: auto;
     height: 400px;
 }
   
