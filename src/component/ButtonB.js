@@ -1,45 +1,75 @@
 import React, { useEffect, useState } from 'react'
-import { Container } from 'bootstrap-4-react/lib/components/layout'
 import { Link } from 'react-router-dom'
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 import axios from 'axios';
 
-const baseURL = `${process.env.REACT_APP_URL}/contacts.json?companyId=560&countryId=226&page=1`
-const token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjU2MCwiZXhwIjoxNzI2NTY3MTc5LCJ0eXBlIjoiYWNjZXNzIiwidGltZXN0YW1wIjoxNjk1MDMxMTc5fQ.0y7NtuVDCvcPvmWbliMs1q02sov2oFC6u2Hi6H4A2W4';
-const config = {
-    headers: { Authorization: `Bearer ${token}` }
-};
-const ButtonA = () => {
-const [post, setPost]= useState([]);
+
+const ButtonB = () => {
+
+  const [content, setContent] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);  
+  const [hasMore, setHasMore] = useState(true); // Indicate if there's more content to load
+
+
+
+  const token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjU2MCwiZXhwIjoxNzI2NTY3MTc5LCJ0eXBlIjoiYWNjZXNzIiwidGltZXN0YW1wIjoxNjk1MDMxMTc5fQ.0y7NtuVDCvcPvmWbliMs1q02sov2oFC6u2Hi6H4A2W4';
+  const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  }; 
 
 
 useEffect(()=>{
-  axios.get(baseURL,config).then(res=>{
-      setPost(res.data.contacts)
-      
-  }).catch((error)=> {
-    console.log(error);
-  });
+  loadContent(pageNumber)  
   },[])
+
+
+  const loadContent = (page) => {
+   const baseURL = `${process.env.REACT_APP_URL}/contacts.json?companyId=560&countryId=226&page=${page}`
+    // Mock API call
+      axios.get(baseURL,config).then(res=>{
+        setContent(res.data.contacts)  
+        const totalRecords=res.data.total;
+        const recordsPerPage=20;
+        const currentPage = Math.ceil(totalRecords / recordsPerPage);
+      setPageNumber(page+1); 
+        if (page >= currentPage) {
+            setHasMore(false);
+          }             
+            
+        }).catch((error)=> {
+          console.log(error);
+        });  
+
+  };
+
+  
   
   return (
-    
-   <section className='buttonA_section'>
-    <Container>
-       <div className='text-center'><h1>US Contacts</h1>
+    <InfiniteScroll
+    dataLength={content.length} // This is important to prevent loading the same content again when scrolling
+    next={() => loadContent(pageNumber)}
+    hasMore={hasMore}
+    loader={<h4 className='loader_text'>Scroll To Load More</h4>}
+    endMessage={<p className='loader_text'>No more items to load</p>}
+  >
+   <section className='modal-content buttonB_section'>
+    <div className='text-center'><h1>All Contacts</h1>
        <Link to="/buttonA" className='buttonA button my-4 d-inline-block mr-2'>switching to Modal A </Link>
        <Link to="/buttonB" className='buttonB button my-4 d-inline-block mr-2'>switching to Modal B </Link>
        <Link to="/" className='buttonC button my-4 d-inline-block'>switching to Modal c </Link>
        </div>
-       <table border={1} className='mt-5 buttonB' width='100%'>
+       <div className='table_div'>
+       <table border={1} className='mt-5 buttonB' width='100%' height='120px'>
         <tbody>
           {
-            Object.values(post).map((e, i) => {   
+            Object.values(content).map((e, i) => {   
              return(
               <tr key={e.id}>
               <td> {e.first_name}</td>
               <td>{e.last_name}</td>
               <td>{e.phone_number}</td>
-              
+        
             </tr>
              )
             })
@@ -47,10 +77,10 @@ useEffect(()=>{
            
         </tbody>
        </table>
-
-    </Container>
+       </div>
    </section>
+   </InfiniteScroll>
   )
 }
 
-export default ButtonA
+export default ButtonB

@@ -25,7 +25,6 @@ useEffect(()=>{
 
 
   const loadContent = (page) => {
-
    const baseURL = `${process.env.REACT_APP_URL}/contacts.json?companyId=560&countryId=226&page=${page}`
     // Mock API call
       axios.get(baseURL,config).then(res=>{
@@ -33,7 +32,6 @@ useEffect(()=>{
         const totalRecords=res.data.total;
         const recordsPerPage=20;
         const currentPage = Math.ceil(totalRecords / recordsPerPage);
-        const recordsAtEnd = totalRecords % recordsPerPage;
       setPageNumber(page+1); 
         if (page >= currentPage) {
             setHasMore(false);
@@ -52,7 +50,7 @@ useEffect(()=>{
     dataLength={content.length} // This is important to prevent loading the same content again when scrolling
     next={() => loadContent(pageNumber)}
     hasMore={hasMore}
-    loader={<h4 className='loader_text'>Loading...</h4>}
+    loader={<h4 className='loader_text'>Scroll To Load More</h4>}
     endMessage={<p className='loader_text'>No more items to load</p>}
   >
    <section className='modal-content buttonA_section'>
