@@ -8,12 +8,12 @@
     width: 100%;
     padding: 0 20px; 
   }
-  .table_div {
+  /* .table_div {
     overflow-y: scroll;
     min-height: auto;
     height: 400px;
 }
-  
+   */
   .button {
     padding: 10px 20px;
     color: white;
