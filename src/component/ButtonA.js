@@ -48,7 +48,7 @@ useEffect(()=>{
     dataLength={content.length} // This is important to prevent loading the same content again when scrolling
     next={() => loadContent(pageNumber)}
     hasMore={hasMore}
-    loader={<h4>Loading...</h4>}
+    loader={<h4 className='loader_text'>Loading...</h4>}
     endMessage={<p>No more items to load</p>}
   >
    <section className='buttonA_section'>
